@@ -3,12 +3,374 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>San Valentin</title>
+
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        height: 100dvh;
+        width: 100dvw;
+        overflow: hidden;
+        position: relative;
+
+        /* Fondo permanente tipo mantel */
+        background-color: white;
+        background-image:
+          repeating-linear-gradient(
+            to right,
+            #98deff8a 0px,
+            #98deff8a 32px,
+            transparent 32px,
+            transparent 64px
+          ),
+          repeating-linear-gradient(
+            to bottom,
+            #98deff8a 0px,
+            #98deff8a 32px,
+            transparent 32px,
+            transparent 64px
+          );
+      }
+
+      /* Fondo tipo mantel / ajedrez */
+      .header {
+        border-top: 48px solid #ffbcf3d9;
+        border-bottom: 48px solid #ffbcf3ba;
+        box-sizing: border-box;
+        display: flex;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .contenido {
+        display: flex;
+        flex-direction: column; /* 👈 esto es la clave */
+        align-items: center;
+      }
+
+      .imagen {
+        width: 420px;
+      }
+
+      .titulo {
+        font-size: 80px;
+        font-weight: bold;
+        color: #7f614c;
+
+        display: inline-block;
+      }
+
+      @keyframes latido {
+        0% {
+          transform: scale(1);
+        }
+        25% {
+          transform: scale(1.15);
+        }
+        40% {
+          transform: scale(1);
+        }
+        60% {
+          transform: scale(1.12);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      img {
+        width: 200px;
+        margin: -60px;
+      }
+
+      .sub-titulo {
+        font-size: 24px;
+        font-weight: 600;
+        color: #e97ea4;
+        margin-top: 16px;
+        animation: latido 1.5s infinite;
+      }
+
+      /*animation*/
+      .pantalla {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.6s ease;
+      }
+
+      .oculta {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .pregunta-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+        /*border-top: 48px solid #fff79bd5;
+        border-bottom: 48px solid #fff79bd8;*/
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+      }
+
+      .pregunta-container {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .pregunta-container::before,
+      .pregunta-container::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 48px;
+        transition: background-color 0.6s ease;
+      }
+
+      .pregunta-container::before {
+        top: 0;
+        background-color: #fff79bd5;
+      }
+
+      .pregunta-container::after {
+        bottom: 0;
+        background-color: #fff79bd8;
+      }
+
+      .pregunta {
+        font-size: 60px;
+        font-weight: bold;
+        color: #7f614c;
+        display: flex;
+        flex-direction: row;
+        width: 600px;
+      }
+
+      .botones {
+        display: flex;
+        gap: 30px;
+      }
+
+      button {
+        padding: 14px 30px;
+        font-size: 20px;
+        border-radius: 12px;
+        border: none;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      }
+
+      button:hover {
+        transform: scale(1.1);
+      }
+
+      .btn-si {
+        font-size: 32px;
+        font-weight: 600;
+        background-color: #00aeff8a;
+        color: #7f614c;
+      }
+
+      .btn-no {
+        font-size: 14px;
+        background-color: #fff79bd5;
+        color: #7f614c;
+      }
+
+      .dijo-que-si {
+        font-size: 32px;
+        min-width: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      /*
+      .pantalla-dijo-que-si > .pregunta-container {
+        border-top: 48px solid #00aeff8a;
+        border-bottom: 48px solid #00aeff8a;
+      }*/
+
+      .pantalla-dijo-que-si > .pregunta-container::before,
+      .pantalla-dijo-que-si > .pregunta-container::after {
+        background-color: #00aeff8a;
+      }
+
+      .pantalla-dijo-que-si > .pregunta-container > .pregunta > .imagen {
+        margin: -20px;
+      }
+
+      .botones {
+        display: flex;
+        gap: 30px;
+        transition: opacity 0.4s ease;
+      }
+
+      .botones.ocultar {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .contenedor-si {
+        position: absolute;
+        bottom: 120px;
+        right: 100px;
+        display: none;
+      }
+
+      .contenedor-si img {
+        width: 150px;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        opacity: 0;
+        transition: opacity 1s ease;
+      }
+
+      .contenedor-si img.activa {
+        opacity: 1;
+      }
+    </style>
   </head>
+
   <body>
+    <!-- Pantalla 1 -->
+    <div class="pantalla" id="pantalla1">
+      <div class="header">
+        <div class="contenido">
+          <div class="titulo">San Valentin</div>
+          <div class="sub-titulo">Presiona ENTER para continuar</div>
+          <img src="imgs/saludando.png" alt="saludando" class="imagen" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Pantalla 2 -->
+    <div class="pantalla oculta" id="pantalla2">
+      <div class="pregunta-container">
+        <div class="pregunta">
+          <p style="text-align: center">¿Quieres ser mi valentín?</p>
+          <img src="imgs/pregunta.png" alt="saludando" class="imagen" />
+        </div>
+        <div class="botones">
+          <button class="btn-si" id="btnSi">Sí 🥸❤️</button>
+          <button class="btn-no" id="btnNo">No 😭</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pantalla 3 -->
+    <div class="pantalla oculta" id="pantalla3">
+      <div class="pregunta-container">
+        <div class="pregunta">
+          <p>💔 Wueno... igual te amo 😭</p>
+        </div>
+        <img src="imgs/triste.png" alt="triste" class="imagen" />
+      </div>
+    </div>
+
+    <!-- #endregion 
     <img src="imgs/saludando.png" alt="saludando" />
     <img src="imgs/pregunta.png" alt="pregunta" />
     <img src="imgs/triste.png" alt="triste" />
     <img src="imgs/feliz.png" alt="feliz" />
+    -->
+
+    <div class="contenedor-si" id="contenedorSi">
+      <img src="imgs/si.jpg" alt="si" id="imgSi" />
+      <img src="imgs/siii.jpg" alt="siii" id="imgSiii" />
+    </div>
+
+    <script>
+      const pantalla1 = document.getElementById("pantalla1");
+      const pantalla2 = document.getElementById("pantalla2");
+
+      const pantalla3 = document.getElementById("pantalla3");
+
+      const btnSi = document.getElementById("btnSi");
+      const btnNo = document.getElementById("btnNo");
+
+      const contenedorSi = document.getElementById("contenedorSi");
+      const imgSi = document.getElementById("imgSi");
+      const imgSiii = document.getElementById("imgSiii");
+
+      let intervaloSi;
+
+      function cambiarPantalla() {
+        pantalla1.classList.add("oculta");
+
+        setTimeout(() => {
+          pantalla2.classList.remove("oculta");
+        }, 600);
+      }
+
+      // ENTER
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          cambiarPantalla();
+        }
+      });
+
+      // Click inicial
+      document.addEventListener("click", () => {
+        if (!pantalla1.classList.contains("oculta")) {
+          cambiarPantalla();
+        }
+      });
+
+      // SI ❤️
+      btnSi.addEventListener("click", () => {
+        const imagenPregunta = pantalla2.querySelector("img");
+        imagenPregunta.src = "imgs/feliz.png";
+
+        const texto = pantalla2.querySelector("p");
+        texto.textContent =
+          "Siuuuuuuuu, Te amo mucho amorcito, eres muy especial para mi, futura esposita 😍❤️";
+        texto.classList.add("dijo-que-si");
+
+        pantalla2.classList.add("pantalla-dijo-que-si");
+
+        // 👇 Ocultar botones
+        const botones = pantalla2.querySelector(".botones");
+        botones.classList.add("ocultar");
+
+        // Mostrar contenedor
+        contenedorSi.style.display = "block";
+
+        // Iniciar animación en bucle
+        let mostrarSi = true;
+
+        intervaloSi = setInterval(() => {
+          if (mostrarSi) {
+            imgSi.classList.add("activa");
+            imgSiii.classList.remove("activa");
+          } else {
+            imgSi.classList.remove("activa");
+            imgSiii.classList.add("activa");
+          }
+
+          mostrarSi = !mostrarSi;
+        }, 800);
+      });
+
+      // NO 😭
+      btnNo.addEventListener("click", () => {
+        pantalla2.classList.remove("pantalla-dijo-que-si");
+        pantalla2.classList.add("oculta");
+
+        setTimeout(() => {
+          pantalla3.classList.remove("oculta");
+        }, 600);
+      });
+    </script>
   </body>
 </html>
